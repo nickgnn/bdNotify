@@ -32,11 +32,11 @@ public class SendTimeServiceImpl implements SendTimeService {
 
 //    @Scheduled(cron = "0 0 10,18 * * *", zone = "Europe/Moscow")
     @Override
-    @Scheduled(fixedDelay = 3500000, initialDelay = 5000)
+    @Scheduled(fixedDelay = 3500000, initialDelay = 50000)
     public void sendTime() {
         send(getTimeDto());
 
-        logger.info("Time successfully sent to Matcher at " + Calendar.getInstance(Locale.getDefault()).getTime());
+        logger.info("(OnDelay)Time successfully sent to Matcher at " + Calendar.getInstance(Locale.getDefault()).getTime());
     }
 
     @Override

@@ -1,20 +1,16 @@
 package org.bd.notify.service.impl;
 
 import org.bd.notify.dto.TimeDto;
-import org.bd.notify.entity.User;
-import org.bd.notify.exception.DBException;
+import org.bd.notify.dto.User;
 import org.bd.notify.service.TimeService;
-import org.bd.notify.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.Locale;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Service
@@ -26,9 +22,6 @@ public class TimeServiceImpl implements TimeService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    @Autowired
-    UserService userService;
-
     @Value("${firstControlTime}")
     private String firstControlTime;
 
@@ -38,8 +31,11 @@ public class TimeServiceImpl implements TimeService {
     @Value("${botUrl}")
     private String botUrl;
 
+    @Value("${crudUrl}")
+    private String crudUrl;
+
     @Override
-    public String compareTime(TimeDto timeDto) throws DBException {
+    public String compareOnTime(TimeDto timeDto) {
         if (isTime(timeDto.getTime().substring(11, 13))) {
             return sendMessageToTg(getResult(timeDto));
         } else {
@@ -49,7 +45,7 @@ public class TimeServiceImpl implements TimeService {
     }
 
     @Override
-    public String compareOnRequest(TimeDto timeDto) throws DBException {
+    public String compareOnRequest(TimeDto timeDto) {
         logger.info("(OnRequest)");
         return sendMessageToTg(getResult(timeDto));
     }
@@ -104,8 +100,8 @@ public class TimeServiceImpl implements TimeService {
         return stringBuilder.toString();
     }
 
-    private String getResult(TimeDto timeDto) throws DBException {
-        Iterable<User> allUsers = userService.getAllUsers();
+    private String getResult(TimeDto timeDto) {
+        List<User> allUsers = getAllUsers();
 
         logger.info("Users successfully received from DB at " + Calendar.getInstance(Locale.getDefault()).getTime());
 
@@ -118,5 +114,17 @@ public class TimeServiceImpl implements TimeService {
     private String sendMessageToTg(String message) {
         String URL = botUrl + "api/telegramChat/sendMessage";
         return restTemplate.postForObject(URL, message, String.class);
+    }
+
+    private List<User> getAllUsers() {
+        List<User> body = restTemplate.exchange(
+                crudUrl + "/api/users/all",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<User>>() {
+                }
+        ).getBody();
+
+        return body.size()!=0 ? body : null;
     }
 }

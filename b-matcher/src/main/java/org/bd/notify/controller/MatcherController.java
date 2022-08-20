@@ -1,7 +1,6 @@
 package org.bd.notify.controller;
 
 import org.bd.notify.dto.TimeDto;
-import org.bd.notify.exception.DBException;
 import org.bd.notify.service.TimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,14 +19,14 @@ public class MatcherController {
     private TimeService timeService;
 
     @PostMapping(value = "/currentTime")
-    public void getMessage(@RequestBody TimeDto timeDto) throws DBException {
+    public void getMessage(@RequestBody TimeDto timeDto) {
         logger.info("Time successfully received from Clock at " + timeDto.getTime());
 
-        timeService.compareTime(timeDto);
+        timeService.compareOnTime(timeDto);
     }
 
     @PostMapping(value = "/onRequest")
-    public void getMessageOnRequest(@RequestBody TimeDto timeDto) throws DBException {
+    public void getMessageOnRequest(@RequestBody TimeDto timeDto) {
         logger.info("Time successfully received from Clock at " + timeDto.getTime());
 
         timeService.compareOnRequest(timeDto);

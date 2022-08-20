@@ -1,29 +1,13 @@
-package org.bd.notify.entity;
+package org.bd.notify.dto;
 
-import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
-@Table(name = "users", schema = "bds")
 public class User {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "name")
     private String name;
-
-    @Column(name = "year")
     private Integer year;
-
-    @Column(name = "month")
     private String month;
-
-    @Column(name = "day")
     private Long day;
-
-    @Column(name = "age")
     private Long age;
 
     public User() {
