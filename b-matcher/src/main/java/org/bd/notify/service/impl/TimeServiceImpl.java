@@ -127,4 +127,23 @@ public class TimeServiceImpl implements TimeService {
 
         return body.size()!=0 ? body : null;
     }
+
+    private Map<String, String> parseMonth() {
+        Map<String, String> map = new HashMap<>();
+
+        map.put("Янв","Jan");
+        map.put("Фев","Feb");
+        map.put("Мар","Mar");
+        map.put("Апр","Apr");
+        map.put("Май","May");
+        map.put("Июн","Jun");
+        map.put("Июл","Jul");
+        map.put("Авг","Aug");
+        map.put("Сен","Sep");
+        map.put("Окт","Oct");
+        map.put("Ноя","Nov");
+        map.put("Дек","Dec");
+
+        return map;
+    }
 }

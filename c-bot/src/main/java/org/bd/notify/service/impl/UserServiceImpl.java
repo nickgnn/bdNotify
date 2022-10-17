@@ -84,10 +84,32 @@ public class UserServiceImpl implements UserService {
                     .append(" ").append(user.getYear())
                     .append(", ").append(user.getMonth())
                     .append(" ").append(user.getDay()).append(",")
-                    .append(" ").append(Calendar.getInstance(Locale.getDefault()).get(Calendar.YEAR) - user.getYear()).append(" годиков;")
+                    .append(" ").append(Calendar.getInstance(Locale.getDefault()).get(Calendar.YEAR) - user.getYear())
                     .append("\n");
         }
 
-        return stringBuilder.toString();
+        return normalizeMessage(stringBuilder.toString());
+    }
+
+    private String normalizeMessage(String message) {
+        String[] units = message.split("\n");
+        StringBuilder result = new StringBuilder();
+
+        Arrays.stream(units)
+                .forEach(unit -> {
+                    if (unit.endsWith("1")) {
+                        result.append(unit + " годик\n");
+                    } else if (unit.endsWith("2")) {
+                        result.append(unit + " годика\n");
+                    } else if (unit.endsWith("3")) {
+                        result.append(unit + " годика\n");
+                    } else if (unit.endsWith("4")) {
+                        result.append(unit + " годика\n");
+                    } else {
+                        result.append(unit + " годиков\n");
+                    }
+                });
+
+        return result.toString();
     }
 }
